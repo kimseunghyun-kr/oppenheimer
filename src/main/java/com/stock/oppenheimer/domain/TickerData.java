@@ -1,8 +1,21 @@
-package com.stock.oppenheimer.WebAPI;
+package com.stock.oppenheimer.domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.Data;
 
 import java.util.Date;
 
+
+@Entity
+@Data
 public class TickerData {
+    @GeneratedValue
+    @Id
+    public Long Id;
+
+    public Date date;
     public String ticker; //단축코드
     public String mktCtg; //시장구분
     public Long open; //시가
