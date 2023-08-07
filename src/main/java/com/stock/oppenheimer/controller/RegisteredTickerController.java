@@ -1,11 +1,10 @@
 package com.stock.oppenheimer.controller;
 
+import com.stock.oppenheimer.domain.StockTickerData;
+import com.stock.oppenheimer.domain.TickerMarketData;
 import com.stock.oppenheimer.service.StockDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,7 +14,13 @@ import java.util.List;
 public class RegisteredTickerController {
     private StockDataService stockDataService;
     @GetMapping
-    List<String> returnAvailableTickers(){
+    public List<String> returnAvailableTickers(){
         return stockDataService.findAllAvailableTickers();
     }
+
+    @PostMapping("/find/{tickerName}")
+    public StockTickerData findTickerInfo(@PathVariable String tickerName) {
+        return stockDataService.findTicker(tickerName);
+    }
+
 }
