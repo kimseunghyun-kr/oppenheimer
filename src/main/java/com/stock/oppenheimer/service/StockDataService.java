@@ -1,10 +1,15 @@
 package com.stock.oppenheimer.service;
 
+import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockTickerData;
 import com.stock.oppenheimer.domain.TickerMarketData;
+import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.repository.TickerDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,5 +26,12 @@ public class StockDataService {
 
     public StockTickerData findTicker(String tickerName) {
         return tickerDataRepository.findByTicker(tickerName);
+    }
+
+    public Page<StockTickerData> findAllMatching(TickerSearchConditionDTO searchDTO, Pageable pageable) {
+
+        // create a specification object
+        Specification<StockTickerData> spec = new TickerSpecification(searchDTO);
+        return tickerDataRepository.findAll(spec, pageable);
     }
 }
