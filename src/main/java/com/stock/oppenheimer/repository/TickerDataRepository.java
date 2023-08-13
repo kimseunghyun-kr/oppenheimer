@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TickerDataRepository extends JpaRepository<StockTickerData, Long> {
-
     StockTickerData findByTicker(String tickerName);
 }
