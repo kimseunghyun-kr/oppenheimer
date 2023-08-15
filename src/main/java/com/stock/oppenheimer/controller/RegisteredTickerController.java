@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/registered")
+@RequestMapping("/registeredTickers")
 public class RegisteredTickerController {
     private StockDataService stockDataService;
-    @GetMapping
+    @GetMapping("/find")
     public List<String> returnAvailableTickers(){
         return stockDataService.findAllAvailableTickers();
     }
