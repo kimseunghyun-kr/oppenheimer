@@ -34,4 +34,12 @@ public class StockDataService {
         Specification<StockTickerData> spec = new TickerSpecification(searchDTO);
         return tickerDataRepository.findAll(spec, pageable);
     }
+
+    public StockTickerData removeTicker (String tickerName) {
+        return tickerDataRepository.deleteByTicker(tickerName);
+    }
+
+    public StockTickerData addTicker(String tickerName) {
+
+    }
 }

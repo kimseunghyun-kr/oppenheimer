@@ -2,6 +2,7 @@ package com.stock.oppenheimer.repository;
 
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.domain.StockTickerData;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,4 +13,5 @@ public interface TickerDataRepository extends JpaRepository<StockTickerData, Lon
 
     StockTickerData findByTicker(String tickerName);
 
+    StockTickerData deleteByTicker(String tickerName);
 }
