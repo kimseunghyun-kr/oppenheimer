@@ -18,7 +18,7 @@ public class WebApiConfig {
 //    금융위원회 한국거래소
     @Bean
     public WebClient KOSPIApiClient() {
-        return WebClient.create("Call Back URL\thttps://apis.data.go.kr/1160100/service/" +
+        return WebClient.create("https://apis.data.go.kr/1160100/service/" +
                 "GetStockSecuritiesInfoService/getStockPriceInfo");
     }
 
