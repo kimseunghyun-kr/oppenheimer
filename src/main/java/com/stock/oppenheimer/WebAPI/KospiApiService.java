@@ -7,6 +7,7 @@ import com.stock.oppenheimer.domain.TickerMarketData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -18,11 +19,18 @@ public class KospiApiService implements ApiService{
     private final WebClient webClient;
     private final String serviceKey;
 
+    private final ConversionService conversionService;
+
     @Autowired
-    public KospiApiService(@Qualifier("KOSPIApiClient")WebClient webclient, @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey) {
+    public KospiApiService(@Qualifier("KOSPIApiClient")WebClient webclient,
+                           ConversionService conversionService,
+                           @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey) {
         this.webClient = webclient;
         this.serviceKey = serviceKey;
+        this.conversionService = conversionService;
     }
+
+
     //    gets data of the stock
     @Override
     public Mono<StockTickerData> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve) {
@@ -35,7 +43,7 @@ public class KospiApiService implements ApiService{
                 .uri(queryUri.build().toUri())
                 .retrieve()
                 .bodyToMono(String.class)
-                .flatMap(KospiApiService::extractStockTickerDataMono
+                .flatMap(this::extractStockTickerDataMono
                 );
     }
 
@@ -50,7 +58,7 @@ public class KospiApiService implements ApiService{
                 .uri(queryUri.build().toUri())
                 .retrieve()
                 .bodyToMono(String.class)
-                .flatMap(KospiApiService::extractMktDataMono
+                .flatMap(this::extractMktDataMono
                 );
 
     }
@@ -72,32 +80,26 @@ public class KospiApiService implements ApiService{
         return queryUri;
     }
 
-    private static Mono<StockTickerData> extractStockTickerDataMono(String apiResponse) {
+    private Mono<StockTickerData> extractStockTickerDataMono(String apiResponse) {
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
             KOSPIAPIDTO KOSPIAPIDTO = objectMapper.readValue(apiResponse, KOSPIAPIDTO.class);
-            StockTickerData stockTickerData = new StockTickerData();
-            stockTickerData.stockName = KOSPIAPIDTO.itmsNm;
-            stockTickerData.mktCtg = KOSPIAPIDTO.mktCtg;
-            stockTickerData.ticker = KOSPIAPIDTO.strnCd;
+            StockTickerData stockTickerData = conversionService.convert(KOSPIAPIDTO, StockTickerData.class);
+//            assert stockTickerData != null;
             return Mono.just(stockTickerData);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO
         }
     }
 
-    private static Mono<TickerMarketData> extractMktDataMono(String apiResponse) {
+    private Mono<TickerMarketData> extractMktDataMono(String apiResponse) {
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
             KOSPIAPIDTO KOSPIAPIDTO = objectMapper.readValue(apiResponse, KOSPIAPIDTO.class);
-            TickerMarketData marketData = new TickerMarketData();
-            marketData.high = KOSPIAPIDTO.hipr;
-            marketData.low = KOSPIAPIDTO.lopr;
-            marketData.volume = KOSPIAPIDTO.trqu;
-            marketData.open = KOSPIAPIDTO.mkp;
-            marketData.close = KOSPIAPIDTO.dpr;
+            TickerMarketData marketData = conversionService.convert(KOSPIAPIDTO, TickerMarketData.class);
+//            assert marketData != null;
             return Mono.just(marketData);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO

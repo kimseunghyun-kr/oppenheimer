@@ -16,8 +16,5 @@ public class KOSPIAPIDTO {
     public Long lopr; //저가
 
     public Long trqu; //거래량
-
-    public Date date; //날짜
-
-
+    public Date basDt; //날짜
 }

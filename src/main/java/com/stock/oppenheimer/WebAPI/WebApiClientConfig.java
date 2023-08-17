@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class WebApiConfig {
+public class WebApiClientConfig{
 
 //    Tiingo
     @Bean
@@ -21,5 +21,6 @@ public class WebApiConfig {
         return WebClient.create("https://apis.data.go.kr/1160100/service/" +
                 "GetStockSecuritiesInfoService/getStockPriceInfo");
     }
+
 
 }
