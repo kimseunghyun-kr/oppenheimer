@@ -17,11 +17,14 @@ public class StockTickerData {
     @Column(nullable = false, unique = true)
     public String ticker;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     public Date lastUpdatedDate;
 
     @Column(nullable = false)
-    public String region;
+    public String mktCtg;
+
+    @Column(nullable = false)
+    public String stockName;
 
     @ElementCollection
     public List<String> associatedIndicators;

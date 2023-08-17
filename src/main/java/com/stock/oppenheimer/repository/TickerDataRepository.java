@@ -14,4 +14,8 @@ public interface TickerDataRepository extends JpaRepository<StockTickerData, Lon
     StockTickerData findByTicker(String tickerName);
 
     StockTickerData deleteByTicker(String tickerName);
+
+    StockTickerData findByStockName(String stockName);
+
+    StockTickerData deleteByStockName(String stockName);
 }

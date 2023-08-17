@@ -11,10 +11,10 @@ import java.util.Date;
 @Service
 public interface ApiService {
 
-    Mono<StockTickerData> fetchStockInfoApi(String tickerToRetrieve,
-                                            @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey);
 
-    Mono<TickerMarketData> fetchMarketDataApi(String tickerToRetrieve, Date fromDate, Date toDate);
+    //    gets data of the stock
+    Mono<StockTickerData> fetchStockInfoApi(String tickerToRetrieve, String stockNameToRetrieve);
 
-
+    Mono<TickerMarketData> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
+                                              Date fromDate, Date toDate);
 }

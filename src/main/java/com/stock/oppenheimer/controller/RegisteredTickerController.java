@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/registeredTickers")
 public class RegisteredTickerController {
     private StockDataService stockDataService;
+
+//    holistic find -> includes findall and find with condition.
     @GetMapping("/find")
     public Page<StockTickerData> findAllMatchTickers(@Valid @ModelAttribute TickerSearchConditionDTO searchDTO, BindingResult result,
                                                      @RequestParam(defaultValue = "0") int page,
@@ -31,23 +33,45 @@ public class RegisteredTickerController {
         return stockDataService.findAllMatching(searchDTO, pageable);
     }
 
+
+//    add delete find by ticker or stockNumberString
 //    simple delete ticker
     @GetMapping("/remove/{tickerName}")
     public StockTickerData removeTicker(@Valid @PathVariable String tickerName) {
-        return stockDataService.removeTicker(tickerName);
+        return stockDataService.removeByTickerName(tickerName);
     }
 
 //simple search ticker
 
     @GetMapping("/find/{tickerName}")
     public StockTickerData findTickerInfo(@PathVariable String tickerName) {
-        return stockDataService.findTicker(tickerName);
+        return stockDataService.findByTickerName(tickerName);
     }
 
     @GetMapping("/add/{tickerName}")
     public StockTickerData addTicker(@PathVariable String tickerName) {
-        return stockDataService.addTicker(tickerName);
+        return stockDataService.addByTickerName(tickerName);
     }
+
+// add delete find by stock name
+    //    simple delete ticker
+    @GetMapping("/remove/{stockName}")
+    public StockTickerData removeTicker(@Valid @PathVariable String stockName) {
+        return stockDataService.removeByStockName(stockName);
+    }
+
+//simple search ticker
+
+    @GetMapping("/find/{stockName}")
+    public StockTickerData findTickerInfo(@PathVariable String stockName) {
+        return stockDataService.findByStockName(stockName);
+    }
+
+    @GetMapping("/add/{stockName}")
+    public StockTickerData addTicker(@PathVariable String stockName) {
+        return stockDataService.addByStockName(stockName);
+    }
+
 
 
 }

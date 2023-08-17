@@ -2,7 +2,6 @@ package com.stock.oppenheimer.service;
 
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockTickerData;
-import com.stock.oppenheimer.domain.TickerMarketData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.repository.TickerDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +19,9 @@ import java.util.List;
 public class StockDataService {
     private TickerDataRepository tickerDataRepository;
 
-    public List<String> findAllAvailableTickers() {
-        return tickerDataRepository.findAll().stream().map(x-> x.ticker).toList();
-    }
-
-    public StockTickerData findTicker(String tickerName) {
-        return tickerDataRepository.findByTicker(tickerName);
-    }
+//    public List<String> findAllAvailableTickers() {
+//        return tickerDataRepository.findAll().stream().map(x-> x.ticker).toList();
+//    }
 
     public Page<StockTickerData> findAllMatching(TickerSearchConditionDTO searchDTO, Pageable pageable) {
 
@@ -35,11 +30,27 @@ public class StockDataService {
         return tickerDataRepository.findAll(spec, pageable);
     }
 
-    public StockTickerData removeTicker (String tickerName) {
+    public StockTickerData findByTickerName(String tickerName) {
+        return tickerDataRepository.findByTicker(tickerName);
+    }
+
+    public StockTickerData removeByTickerName(String tickerName) {
         return tickerDataRepository.deleteByTicker(tickerName);
     }
 
-    public StockTickerData addTicker(String tickerName) {
+    public StockTickerData addByTickerName(String tickerName) {
+
+    }
+
+    public StockTickerData removeByStockName(String stockName) {
+        return tickerDataRepository.findByStockName(stockName);
+    }
+
+    public StockTickerData findByStockName(String stockName) {
+        return tickerDataRepository.deleteByStockName(stockName);
+    }
+
+    public StockTickerData addByStockName(String stockName) {
 
     }
 }
