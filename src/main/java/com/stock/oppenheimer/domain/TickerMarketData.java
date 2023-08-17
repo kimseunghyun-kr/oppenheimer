@@ -17,8 +17,7 @@ public class TickerMarketData {
     @JoinColumn(name = "stockTickerId", referencedColumnName = "id", nullable = false)
     private StockTickerData stockTickerData;
 
-    public Date date;
-    public String mktCtg; //시장구분
+    public Date date; //거래일
     public Long open; //시가
     public Long high; //고가
     public Long low; //저가

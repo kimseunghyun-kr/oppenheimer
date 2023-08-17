@@ -37,38 +37,38 @@ public class RegisteredTickerController {
 //    add delete find by ticker or stockNumberString
 //    simple delete ticker
     @GetMapping("/remove/{tickerName}")
-    public StockTickerData removeTicker(@Valid @PathVariable String tickerName) {
+    public StockTickerData removeTickerByTicker(@Valid @PathVariable String tickerName) {
         return stockDataService.removeByTickerName(tickerName);
     }
 
 //simple search ticker
 
     @GetMapping("/find/{tickerName}")
-    public StockTickerData findTickerInfo(@PathVariable String tickerName) {
+    public StockTickerData findTickerInfoByTicker(@PathVariable String tickerName) {
         return stockDataService.findByTickerName(tickerName);
     }
 
     @GetMapping("/add/{tickerName}")
-    public StockTickerData addTicker(@PathVariable String tickerName) {
+    public StockTickerData addTickerByTicker(@PathVariable String tickerName) {
         return stockDataService.addByTickerName(tickerName);
     }
 
 // add delete find by stock name
     //    simple delete ticker
     @GetMapping("/remove/{stockName}")
-    public StockTickerData removeTicker(@Valid @PathVariable String stockName) {
+    public StockTickerData removeTickerByStockName(@Valid @PathVariable String stockName) {
         return stockDataService.removeByStockName(stockName);
     }
 
 //simple search ticker
 
     @GetMapping("/find/{stockName}")
-    public StockTickerData findTickerInfo(@PathVariable String stockName) {
+    public StockTickerData findTickerInfoByStockName(@PathVariable String stockName) {
         return stockDataService.findByStockName(stockName);
     }
 
     @GetMapping("/add/{stockName}")
-    public StockTickerData addTicker(@PathVariable String stockName) {
+    public StockTickerData addTickerByStockName(@PathVariable String stockName) {
         return stockDataService.addByStockName(stockName);
     }
 

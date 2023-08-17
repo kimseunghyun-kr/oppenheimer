@@ -13,8 +13,9 @@ public interface ApiService {
 
 
     //    gets data of the stock
-    Mono<StockTickerData> fetchStockInfoApi(String tickerToRetrieve, String stockNameToRetrieve);
+    Mono<StockTickerData> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve);
 
     Mono<TickerMarketData> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
                                               Date fromDate, Date toDate);
+
 }
