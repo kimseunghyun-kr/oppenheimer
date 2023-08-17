@@ -1,17 +1,16 @@
 package com.stock.oppenheimer.controller;
 
-import com.stock.oppenheimer.domain.StockTickerData;
+import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import jakarta.persistence.criteria.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class TickerSpecification implements Specification<StockTickerData> {
+public class TickerSpecification implements Specification<StockData> {
 
     TickerSearchConditionDTO searchConditionDTO;
 
@@ -20,7 +19,7 @@ public class TickerSpecification implements Specification<StockTickerData> {
     }
 
     @Override
-    public Predicate toPredicate(Root<StockTickerData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(Root<StockData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
         if(searchConditionDTO.nameContains != null && !searchConditionDTO.nameContains.isEmpty()){

@@ -1,8 +1,7 @@
 package com.stock.oppenheimer.WebAPI;
 
-import com.stock.oppenheimer.domain.StockTickerData;
-import com.stock.oppenheimer.domain.TickerMarketData;
-import org.springframework.beans.factory.annotation.Value;
+import com.stock.oppenheimer.DTO.MktDataDTO;
+import com.stock.oppenheimer.DTO.StockDataDTO;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,9 +12,9 @@ public interface ApiService {
 
 
     //    gets data of the stock
-    Mono<StockTickerData> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve);
+    Mono<StockDataDTO> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve);
 
-    Mono<TickerMarketData> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
-                                              Date fromDate, Date toDate);
+    Mono<MktDataDTO> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
+                                        Date fromDate, Date toDate);
 
 }

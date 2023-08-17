@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class StockTickerData {
+public class StockData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

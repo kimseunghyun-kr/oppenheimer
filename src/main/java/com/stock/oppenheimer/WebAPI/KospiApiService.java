@@ -2,8 +2,9 @@ package com.stock.oppenheimer.WebAPI;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stock.oppenheimer.domain.StockTickerData;
-import com.stock.oppenheimer.domain.TickerMarketData;
+import com.stock.oppenheimer.DTO.KOSPIStockDataDTO;
+import com.stock.oppenheimer.DTO.MktDataDTO;
+import com.stock.oppenheimer.DTO.StockDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,13 @@ import reactor.core.publisher.Mono;
 
 import java.util.Date;
 
+/**
+ * Receive Data from External API: this class is responsible for making the necessary calls to the external API, receiving the data, and possibly handling any error cases that might arise during the API interaction.
+ *
+ * Parse Data into DTO: After receiving the data, this class is responsible for parsing and transforming it into a DTO (Data Transfer Object) that is suitable for consumption by other parts of your application.
+ *
+ * Return DTO in a Reactive Wrapper: this class can wrap the parsed DTO in a reactive type (such as Mono or Flux, depending on your use case) to indicate the asynchronous nature of the data retrieval and processing.
+ */
 public class KospiApiService implements ApiService{
 
     private final WebClient webClient;
@@ -33,7 +41,7 @@ public class KospiApiService implements ApiService{
 
     //    gets data of the stock
     @Override
-    public Mono<StockTickerData> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve) {
+    public Mono<StockDataDTO> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve) {
 
         UriComponentsBuilder queryUri = baseURISetting(tickerToRetrieve, stockNameToRetrieve);
 
@@ -49,8 +57,8 @@ public class KospiApiService implements ApiService{
 
 
     @Override
-    public Mono<TickerMarketData> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
-                                                     Date fromDate, Date toDate) {
+    public Mono<MktDataDTO> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
+                                               Date fromDate, Date toDate) {
 
         UriComponentsBuilder queryUri = baseURISetting(tickerToRetrieve, stockNameToRetrieve);
         return webClient
@@ -80,27 +88,27 @@ public class KospiApiService implements ApiService{
         return queryUri;
     }
 
-    private Mono<StockTickerData> extractStockTickerDataMono(String apiResponse) {
+    private Mono<StockDataDTO> extractStockTickerDataMono(String apiResponse) {
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            KOSPIAPIDTO KOSPIAPIDTO = objectMapper.readValue(apiResponse, KOSPIAPIDTO.class);
-            StockTickerData stockTickerData = conversionService.convert(KOSPIAPIDTO, StockTickerData.class);
+            KOSPIStockDataDTO KOSPIStockDataDTO = objectMapper.readValue(apiResponse, KOSPIStockDataDTO.class);
+            StockDataDTO stockDataDTO = conversionService.convert(KOSPIStockDataDTO, StockDataDTO.class);
 //            assert stockTickerData != null;
-            return Mono.just(stockTickerData);
+            return Mono.just(stockDataDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO
         }
     }
 
-    private Mono<TickerMarketData> extractMktDataMono(String apiResponse) {
+    private Mono<MktDataDTO> extractMktDataMono(String apiResponse) {
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            KOSPIAPIDTO KOSPIAPIDTO = objectMapper.readValue(apiResponse, KOSPIAPIDTO.class);
-            TickerMarketData marketData = conversionService.convert(KOSPIAPIDTO, TickerMarketData.class);
+            KOSPIStockDataDTO KOSPIStockDataDTO = objectMapper.readValue(apiResponse, KOSPIStockDataDTO.class);
+            MktDataDTO mktDataDTO = conversionService.convert(KOSPIStockDataDTO, MktDataDTO.class);
 //            assert marketData != null;
-            return Mono.just(marketData);
+            return Mono.just(mktDataDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO
         }

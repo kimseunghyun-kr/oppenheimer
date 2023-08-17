@@ -8,16 +8,16 @@ import java.util.Date;
 
 @Entity
 @Data
-public class TickerMarketData {
+public class MarketData {
     @GeneratedValue
     @Id
     public Long Id;
 
     @ManyToOne
     @JoinColumn(name = "stockTickerId", referencedColumnName = "id", nullable = false)
-    private StockTickerData stockTickerData;
+    private StockData stockData;
 
-    public Date date; //거래일
+    public Date tradeDate; //거래일
     public Long open; //시가
     public Long high; //고가
     public Long low; //저가
