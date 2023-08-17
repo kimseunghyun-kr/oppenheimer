@@ -3,7 +3,7 @@ package com.stock.oppenheimer.WebAPI;
 import java.util.Date;
 
 public class KOSPIAPIDTO {
-    String resultM
+//    String resultM
     public String itmsNm;
     public String mktCtg;
     public String strnCd;
