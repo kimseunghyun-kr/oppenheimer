@@ -3,7 +3,7 @@ package com.stock.oppenheimer.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ public class StockData {
     public String ticker;
 
 //    @Column(nullable = false)
-    public Date lastUpdatedDate;
+    public LocalDate lastUpdatedDate;
 
     @Column(nullable = false)
     public String mktCtg;

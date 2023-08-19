@@ -5,7 +5,7 @@ import com.stock.oppenheimer.DTO.StockDataDTO;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 public interface ApiService {
@@ -14,7 +14,7 @@ public interface ApiService {
     //    gets data of the stock
     Mono<StockDataDTO> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve);
 
-    Mono<MktDataDTO> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
-                                        Date fromDate, Date toDate);
+    Mono<MktDataDTO> fetchMarketData(String tickerToRetrieve, String stockNameToRetrieve,
+                                     LocalDate fromDate, LocalDate toDate);
 
 }

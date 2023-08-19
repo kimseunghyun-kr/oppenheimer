@@ -2,7 +2,8 @@ package com.stock.oppenheimer.DTO;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Data
 public class MktDataDTO {
@@ -14,5 +15,6 @@ public class MktDataDTO {
     public Long low; //저가
 
     public Long volume; //거래량
-    public Date tradeDate; //날짜
+
+    public LocalDate tradeDate; //날짜
 }

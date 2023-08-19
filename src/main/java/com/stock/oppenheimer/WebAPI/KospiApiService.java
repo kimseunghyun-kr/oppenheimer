@@ -2,6 +2,7 @@ package com.stock.oppenheimer.WebAPI;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stock.oppenheimer.DTO.KOSPIMktDataDTO;
 import com.stock.oppenheimer.DTO.KOSPIStockDataDTO;
 import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.DTO.StockDataDTO;
@@ -13,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Receive Data from External API: this class is responsible for making the necessary calls to the external API, receiving the data, and possibly handling any error cases that might arise during the API interaction.
@@ -57,8 +58,8 @@ public class KospiApiService implements ApiService{
 
 
     @Override
-    public Mono<MktDataDTO> fetchMarketDataApi(String tickerToRetrieve, String stockNameToRetrieve,
-                                               Date fromDate, Date toDate) {
+    public Mono<MktDataDTO> fetchMarketData(String tickerToRetrieve, String stockNameToRetrieve,
+                                            LocalDate fromDate, LocalDate toDate) {
 
         UriComponentsBuilder queryUri = baseURISetting(tickerToRetrieve, stockNameToRetrieve);
         return webClient
@@ -95,7 +96,7 @@ public class KospiApiService implements ApiService{
             KOSPIStockDataDTO KOSPIStockDataDTO = objectMapper.readValue(apiResponse, KOSPIStockDataDTO.class);
             StockDataDTO stockDataDTO = conversionService.convert(KOSPIStockDataDTO, StockDataDTO.class);
 //            assert stockTickerData != null;
-            return Mono.just(stockDataDTO);
+            return Mono.justOrEmpty(stockDataDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO
         }
@@ -105,10 +106,10 @@ public class KospiApiService implements ApiService{
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            KOSPIStockDataDTO KOSPIStockDataDTO = objectMapper.readValue(apiResponse, KOSPIStockDataDTO.class);
-            MktDataDTO mktDataDTO = conversionService.convert(KOSPIStockDataDTO, MktDataDTO.class);
+            KOSPIMktDataDTO KOSPIMktDataDTO = objectMapper.readValue(apiResponse, KOSPIMktDataDTO.class);
+            MktDataDTO mktDataDTO = conversionService.convert(KOSPIMktDataDTO, MktDataDTO.class);
 //            assert marketData != null;
-            return Mono.just(mktDataDTO);
+            return Mono.justOrEmpty(mktDataDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e); //TODO
         }
