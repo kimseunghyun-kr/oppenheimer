@@ -49,6 +49,7 @@ public class StockDataService {
         return tickerDataRepository.deleteByTicker(tickerName);
     }
 
+    // method reference does not work here because -> Method references are better suited for direct method calls, while lambdas might provide more flexibility when dealing with reactive chains, especially if you need to perform multiple operations or access surrounding variables.
     public Mono<StockData> addByTickerName(String tickerName) {
         Mono<StockData> sd =  apiService.fetchStockInfo(tickerName, null)
                 .flatMap(stockDataDTO-> {
@@ -57,16 +58,20 @@ public class StockDataService {
                             .thenReturn(stockData);
                 });
 
-        apiService.fetchMarketData(tickerName, null, null, LocalDate.now())
+        Mono<MarketData> md = apiService.fetchMarketData(tickerName, null, null, LocalDate.now())
                 .flatMap(marketDataDTO -> {
                     MarketData marketData = conversionService.convert(marketDataDTO, MarketData.class);
                     return Mono.fromCallable(()->marketDataRepository.save(marketData))
                             .doOnNext(savedMktData-> log.info("mktData, {}", savedMktData))
-                            .then();
+                            .thenReturn(marketData);
                 });
 
-        return sd;
+        return sd.flatMap(stockData -> md.thenReturn(stockData));
 
+    }
+//backup method in case async fails or something
+    public StockData addByTickerNameSerialised(String tickerName) {
+        return this.addByTickerName(tickerName).block();
     }
 
     public StockData removeByStockName(String stockName) {
@@ -81,15 +86,19 @@ public class StockDataService {
         Mono<StockData> sd =  apiService.fetchStockInfo(null, stockName)
                 .flatMap(stockDataDTO-> {
                     StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
-                    return Mono.fromCallable(()->tickerDataRepository.save(stockData));
+                    return Mono.fromCallable(()->tickerDataRepository.save(stockData))
+                            .thenReturn(stockData);
                 });
+
         Mono<MarketData> md = apiService.fetchMarketData(null, stockName, null, LocalDate.now())
                 .flatMap(marketDataDTO -> {
                     MarketData marketData = conversionService.convert(marketDataDTO, MarketData.class);
-                    return Mono.fromCallable(()->marketDataRepository.save(marketData));
+                    return Mono.fromCallable(()->marketDataRepository.save(marketData))
+                            .doOnNext(savedMktData-> log.info("mktData, {}", savedMktData))
+                            .thenReturn(marketData);
                 });
 
-        return sd;
+        return sd.flatMap(stockData -> md.thenReturn(stockData));
 
     }
 }
