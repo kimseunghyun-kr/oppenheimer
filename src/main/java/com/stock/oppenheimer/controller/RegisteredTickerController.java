@@ -5,6 +5,7 @@ import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.service.StockDataService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +17,14 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequestMapping("/registeredTickers")
 public class RegisteredTickerController {
-    private StockDataService stockDataService;
+    private final StockDataService stockDataService;
 
-//    holistic find -> includes findall and find with condition.
+    @Autowired
+    public RegisteredTickerController(StockDataService stockDataService) {
+        this.stockDataService = stockDataService;
+    }
+
+    //    holistic find -> includes findall and find with condition.
     @GetMapping("/find")
     public Page<StockData> findAllMatchTickers(@Valid @ModelAttribute TickerSearchConditionDTO searchDTO, BindingResult result,
                                                @RequestParam(defaultValue = "0") int page,
