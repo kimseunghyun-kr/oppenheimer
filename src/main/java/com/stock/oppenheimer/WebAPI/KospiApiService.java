@@ -6,10 +6,12 @@ import com.stock.oppenheimer.DTO.KOSPIMktDataDTO;
 import com.stock.oppenheimer.DTO.KOSPIStockDataDTO;
 import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.DTO.StockDataDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -23,6 +25,8 @@ import java.time.LocalDate;
  *
  * Return DTO in a Reactive Wrapper: this class can wrap the parsed DTO in a reactive type (such as Mono or Flux, depending on your use case) to indicate the asynchronous nature of the data retrieval and processing.
  */
+@Service
+@Slf4j
 public class KospiApiService implements ApiService{
 
     private final WebClient webClient;
