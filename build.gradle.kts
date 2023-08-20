@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.1.2")
 //	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 
 	compileOnly("org.projectlombok:lombok")
