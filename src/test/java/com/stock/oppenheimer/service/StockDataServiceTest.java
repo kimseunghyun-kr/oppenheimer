@@ -31,6 +31,7 @@ public class StockDataServiceTest {
     @Autowired
     StockDataService stockDataService;
 
+
     private StockData stockData;
 
     @BeforeEach
@@ -73,17 +74,6 @@ public class StockDataServiceTest {
         stockDataPage = stockDataService.findAllMatching(scDto, pageable);
         assertThat(stockDataPage.getTotalElements()).isEqualTo(0);
     }
-
-    @Test
-    void testAddByStockName() {
-        // Call the method and verify the outcome
-        Mono<StockData> resultMono = stockDataService.addByStockName("삼성전자");
-        StepVerifier.create(resultMono)
-                .expectNextCount(1)
-                .verifyComplete();
-    }
-
-
 
 
 

@@ -20,21 +20,20 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
 public class StockDataService {
     private final TickerDataRepository tickerDataRepository;
-    private final MarketDataRepository marketDataRepository;
+    private final MarketDataService marketDataService;
     private final ApiService apiService;
     private final ConversionService conversionService;
 
     @Autowired
-    public StockDataService(TickerDataRepository tickerDataRepository, MarketDataRepository marketDataRepository, ApiService apiService, ConversionService conversionService) {
+    public StockDataService(TickerDataRepository tickerDataRepository, MarketDataService marketDataService, ApiService apiService, ConversionService conversionService) {
         this.tickerDataRepository = tickerDataRepository;
-        this.marketDataRepository = marketDataRepository;
+        this.marketDataService = marketDataService;
         this.apiService = apiService;
         this.conversionService = conversionService;
     }
@@ -55,53 +54,36 @@ public class StockDataService {
     }
 
     // method reference does not work here because -> Method references are better suited for direct method calls, while lambdas might provide more flexibility when dealing with reactive chains, especially if you need to perform multiple operations or access surrounding variables.
-    public Mono<StockData> addByTickerName(String tickerName) {
-        return apiService.fetchStockInfo(tickerName, null)
-                .flatMap(this::saveStockDataAndFetchMarketData);
-    }
-
-    //backup method in case async fails or something
-    public StockData addByTickerNameSerialised(String tickerName) {
-        return this.addByTickerName(tickerName).block();
+    public Mono<StockData> addStockData(String stockName, String tickerName) {
+        return (stockName != null)
+                ? fetchStockData(stockName, false)
+                : fetchStockData(tickerName, true);
     }
 
     public StockData removeByStockName(String stockName) {
-        return tickerDataRepository.findByStockName(stockName);
-    }
-
-    public StockData findByStockName(String stockName) {
         return tickerDataRepository.deleteByStockName(stockName);
     }
 
-    public Mono<StockData> addByStockName(String stockName) {
-        return apiService.fetchStockInfo(null, stockName)
-                .flatMap(this::saveStockDataAndFetchMarketData);
-
+    public StockData findByStockName(String stockName) {
+        return tickerDataRepository.findByStockName(stockName);
     }
 
+    public Mono<StockData> fetchStockData (String inputString ,boolean isTicker) {
+        if(isTicker) {
+            return apiService.fetchStockInfo(inputString, null)
+                    .flatMap(this::saveStockData);
+        }
+        else{
+            return apiService.fetchStockInfo(null, inputString)
+                    .flatMap(this::saveStockData);
+        }
+    }
 
 //helper methods
-
-    private Mono<StockData> saveStockDataAndFetchMarketData(StockDataDTO stockDataDTO) {
+    private Mono<StockData> saveStockData(StockDataDTO stockDataDTO) {
         StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
-
-        return Mono.fromCallable(() -> tickerDataRepository.save(stockData))
-                .flatMap(savedStockData -> fetchAndSaveMarketData(savedStockData).collectList().thenReturn(savedStockData));
+        return Mono.fromCallable(() -> tickerDataRepository.save(stockData));
     }
 
-    private Flux<MarketData> fetchAndSaveMarketData(StockData savedStockData) {
-        return apiService.fetchMarketData(savedStockData.getTicker(), null, null, LocalDate.now())
-                .flatMapMany(marketDataDTOList -> convertAndSaveMarketData(marketDataDTOList, savedStockData));
-    }
-
-    private Flux<MarketData> convertAndSaveMarketData(List<MktDataDTO> marketDataDTOList, StockData savedStockData) {
-        return Flux.fromIterable(marketDataDTOList)
-                .flatMap(mktDataDTO -> {
-                    MarketData marketData = conversionService.convert(mktDataDTO, MarketData.class);
-                    marketData.setStockData(savedStockData);
-                    marketDataRepository.save(marketData);
-                    return Mono.just(marketData);
-                });
-    }
 
 }

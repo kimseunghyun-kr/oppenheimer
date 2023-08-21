@@ -3,6 +3,7 @@ package com.stock.oppenheimer.controller;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.service.StockDataService;
+import com.stock.oppenheimer.service.StockMarketFacadeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/registeredTickers")
 public class RegisteredTickerController {
     private final StockDataService stockDataService;
+    private final StockMarketFacadeService stockMarketFacadeService;
 
     @Autowired
-    public RegisteredTickerController(StockDataService stockDataService) {
+    public RegisteredTickerController(StockDataService stockDataService, StockMarketFacadeService stockMarketFacadeService) {
         this.stockDataService = stockDataService;
+        this.stockMarketFacadeService = stockMarketFacadeService;
     }
 
     //    holistic find -> includes findall and find with condition.
@@ -57,7 +60,7 @@ public class RegisteredTickerController {
 
     @GetMapping("/add/{tickerName}")
     public Mono<StockData> addTickerByTicker(@PathVariable String tickerName) {
-        return stockDataService.addByTickerName(tickerName);
+        return stockMarketFacadeService.addStockMarketData(null,tickerName);
     }
 
 // add delete find by stock name
@@ -76,7 +79,7 @@ public class RegisteredTickerController {
 
     @GetMapping("/add/{stockName}")
     public Mono<StockData> addTickerByStockName(@PathVariable String stockName) {
-        return stockDataService.addByStockName(stockName);
+        return stockMarketFacadeService.addStockMarketData(stockName,null);
     }
 
 
