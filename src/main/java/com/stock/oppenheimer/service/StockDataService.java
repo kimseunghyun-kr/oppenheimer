@@ -1,13 +1,10 @@
 package com.stock.oppenheimer.service;
 
-import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.DTO.StockDataDTO;
 import com.stock.oppenheimer.WebAPI.ApiService;
 import com.stock.oppenheimer.controller.TickerSpecification;
-import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.repository.MarketDataRepository;
 import com.stock.oppenheimer.repository.TickerDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @Slf4j
