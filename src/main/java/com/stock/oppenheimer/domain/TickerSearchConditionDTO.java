@@ -7,13 +7,14 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import java.util.Date;
 
 public class TickerSearchConditionDTO {
+    public String ticker;
 
     public String nameContains;
 
     public Date lastUpdatedAfter;
 
     public Date lastUpdatedBefore;
-    public String region;
+    public String mktCtg;
 
     public String sortBy = "ticker";
 

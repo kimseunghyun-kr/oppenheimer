@@ -22,8 +22,12 @@ public class TickerSpecification implements Specification<StockData> {
     public Predicate toPredicate(Root<StockData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
+        if(searchConditionDTO.ticker != null && !searchConditionDTO.ticker.isEmpty()){
+            predicates.add(cb.like(root.get("ticker"), "%" + searchConditionDTO.ticker + "%"));
+        }
+
         if(searchConditionDTO.nameContains != null && !searchConditionDTO.nameContains.isEmpty()){
-            predicates.add(cb.like(root.get("ticker"), "%" + searchConditionDTO.nameContains + "%"));
+            predicates.add(cb.like(root.get("stockName"), "%" + searchConditionDTO.nameContains + "%"));
         }
 
         // add predicate for lastUpdatedDate
@@ -37,8 +41,8 @@ public class TickerSpecification implements Specification<StockData> {
         }
 
         // add predicate for region
-        if (searchConditionDTO.region != null && !searchConditionDTO.region.isEmpty()) {
-            predicates.add(cb.equal(root.get("region"), searchConditionDTO.region));
+        if (searchConditionDTO.mktCtg != null && !searchConditionDTO.mktCtg.isEmpty()) {
+            predicates.add(cb.equal(root.get("mktCtg"), searchConditionDTO.mktCtg));
         }
 
         // add predicate for sortBy

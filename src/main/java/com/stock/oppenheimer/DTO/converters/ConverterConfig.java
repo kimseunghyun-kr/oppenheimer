@@ -10,7 +10,7 @@ public class ConverterConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StockApiToStockTickerDataConverter());
         registry.addConverter(new MktDataApiToTickerMarketDataConverter());
-        registry.addConverter(new KOSPIMktConverter());
-        registry.addConverter(new KOSPIStockConverter());
+        registry.addConverter(new KOSPIMktDtoConverter());
+        registry.addConverter(new KOSPIStockDtoConverter());
     }
 }

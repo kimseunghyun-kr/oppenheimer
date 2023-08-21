@@ -1,5 +1,6 @@
 package com.stock.oppenheimer.DTO;
 
+import com.stock.oppenheimer.domain.StockData;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class MktDataDTO {
+    public String ticker;
     public Long open; //시가
     public Long close; //종가
 
