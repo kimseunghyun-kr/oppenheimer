@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+//@Transactional
 public class MarketDataService {
 
     private final MarketDataRepository marketDataRepository;
@@ -31,8 +33,8 @@ public class MarketDataService {
     }
 
 
-    public Flux<MarketData> fetchMarketData(StockData savedStockData) {
-        return apiService.fetchMarketData(savedStockData.getTicker(), null, null, LocalDate.now())
+    public Flux<MarketData> fetchMarketData(StockData savedStockData, LocalDate fromDate, LocalDate toDate) {
+        return apiService.fetchMarketData(savedStockData.getTicker(), null, fromDate, toDate)
                 .flatMapMany(marketDataDTOList -> saveMarketData(marketDataDTOList, savedStockData));
     }
 

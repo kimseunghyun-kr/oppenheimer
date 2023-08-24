@@ -20,7 +20,7 @@ public class StockMarketDataServiceTest {
 
     private final StockMarketFacadeService stockMarketFacadeService;
     private final StockDataService stockDataService;
-    private MarketDataService marketDataService;
+    private final MarketDataService marketDataService;
 
     @Autowired
     public StockMarketDataServiceTest(StockMarketFacadeService stockMarketFacadeService, StockDataService stockDataService, MarketDataService marketDataService) {

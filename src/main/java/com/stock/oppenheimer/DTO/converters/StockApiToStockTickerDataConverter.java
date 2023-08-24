@@ -12,6 +12,7 @@ public class StockApiToStockTickerDataConverter implements Converter<StockDataDT
         stockData.stockName = source.stockName;
         stockData.mktCtg = source.mktCtg;
         stockData.ticker = source.ticker;
+        stockData.count = source.count;
         return stockData;
     }
 }

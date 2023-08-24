@@ -2,6 +2,7 @@ package com.stock.oppenheimer.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,9 +18,6 @@ public class StockData {
     @Column(nullable = false, unique = true)
     public String ticker;
 
-//    @Column(nullable = false)
-    public LocalDate lastUpdatedDate;
-
     @Column(nullable = false)
     public String mktCtg;
 
@@ -29,6 +27,10 @@ public class StockData {
     @ElementCollection
     public List<String> associatedIndicators;
 
+    //    @Column(nullable = false)
+    public LocalDate lastUpdatedDate = LocalDate.now();
+
+    public Integer count;
 
 
 }

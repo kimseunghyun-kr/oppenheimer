@@ -10,6 +10,7 @@ public class StockDataDTO {
     public String stockName;
     public String mktCtg;
     public String ticker;
+    public Integer count;
 
 
 }

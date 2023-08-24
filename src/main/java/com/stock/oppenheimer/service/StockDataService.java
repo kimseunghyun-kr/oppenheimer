@@ -1,6 +1,5 @@
 package com.stock.oppenheimer.service;
 
-import com.stock.oppenheimer.DTO.StockDataDTO;
 import com.stock.oppenheimer.WebAPI.ApiService;
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockData;
@@ -13,21 +12,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 
 @Service
 @Slf4j
+//@Transactional
 public class StockDataService {
     private final TickerDataRepository tickerDataRepository;
-    private final MarketDataService marketDataService;
     private final ApiService apiService;
     private final ConversionService conversionService;
 
     @Autowired
-    public StockDataService(TickerDataRepository tickerDataRepository, MarketDataService marketDataService, ApiService apiService, ConversionService conversionService) {
+    public StockDataService(TickerDataRepository tickerDataRepository, ApiService apiService, ConversionService conversionService) {
         this.tickerDataRepository = tickerDataRepository;
-        this.marketDataService = marketDataService;
         this.apiService = apiService;
         this.conversionService = conversionService;
     }
@@ -65,17 +66,32 @@ public class StockDataService {
     public Mono<StockData> fetchStockData (String inputString ,boolean isTicker) {
         if(isTicker) {
             return apiService.fetchStockInfo(inputString, null)
-                    .flatMap(this::saveStockData);
+                    .flatMap(stockDataDTO -> {
+                        StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
+//                        quick conversion failure check.
+                        if(stockData == null) {
+                            return Mono.empty();
+                        }
+                        stockData.setLastUpdatedDate(LocalDate.now());
+                        return saveStockData(stockData);
+                    });
         }
         else{
             return apiService.fetchStockInfo(null, inputString)
-                    .flatMap(this::saveStockData);
+                    .flatMap(stockDataDTO -> {
+                        StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
+//                        quick conversion failure check
+                        if(stockData == null) {
+                            return Mono.empty();
+                        }
+                        stockData.setLastUpdatedDate(LocalDate.now());
+                        return saveStockData(stockData);
+                    });
         }
     }
 
 //helper methods
-    private Mono<StockData> saveStockData(StockDataDTO stockDataDTO) {
-        StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
+    private Mono<StockData> saveStockData(StockData stockData) {
         return Mono.fromCallable(() -> tickerDataRepository.save(stockData));
     }
 

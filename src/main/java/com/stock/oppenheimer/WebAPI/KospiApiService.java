@@ -47,6 +47,7 @@ public class KospiApiService implements ApiService{
 
 
     //    gets data of the stock
+    //    stockDataDTO returned can never be null
     @Override
     public Mono<StockDataDTO> fetchStockInfo(String tickerToRetrieve, String stockNameToRetrieve) {
         //            UriComponentsBuilder queryUri = baseURISetting(tickerToRetrieve, stockNameToRetrieve);
@@ -63,7 +64,7 @@ public class KospiApiService implements ApiService{
     private Function<UriBuilder, URI> queryURIBuilder(String tickerToRetrieve, String stockNameToRetrieve) {
         return uriBuilder -> {
             uriBuilder.queryParam("servicekey", serviceKey)
-                    .queryParam("numOfRows", 10)
+                    .queryParam("numOfRows", 1)
                     .queryParam("pageNo", 1)
                     .queryParam("resultType", "json");
 
@@ -99,8 +100,8 @@ public class KospiApiService implements ApiService{
         try {
             // Use Jackson ObjectMapper to parse JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            KospiDTOItem KospiDtoItem = objectMapper.readValue(apiResponse, KospiDTO.class).getResponse().getBody().getItems().getItem().get(0);
-            StockDataDTO stockDataDTO = conversionService.convert(KospiDtoItem, StockDataDTO.class);
+            KospiDTO kospiDTO = objectMapper.readValue(apiResponse, KospiDTO.class);
+            StockDataDTO stockDataDTO = conversionService.convert(kospiDTO, StockDataDTO.class);
 //            assert stockTickerData != null;
             return Mono.justOrEmpty(stockDataDTO);
         } catch (JsonProcessingException e) {
