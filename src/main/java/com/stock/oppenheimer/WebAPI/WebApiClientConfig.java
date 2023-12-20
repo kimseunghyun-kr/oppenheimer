@@ -2,6 +2,7 @@ package com.stock.oppenheimer.WebAPI;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
@@ -20,6 +21,11 @@ public class WebApiClientConfig{
     public WebClient KOSPIApiClient() {
         return WebClient.create("https://apis.data.go.kr/1160100/service/" +
                 "GetStockSecuritiesInfoService/getStockPriceInfo");
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 

@@ -35,19 +35,16 @@ public class MarketDataService {
 
     public Flux<MarketData> fetchMarketData(StockData savedStockData, LocalDate fromDate, LocalDate toDate) {
         return apiService.fetchMarketData(savedStockData.getTicker(), null, fromDate, toDate)
-                .flatMapMany(marketDataDTOList -> saveMarketData(marketDataDTOList, savedStockData));
+                .flatMap(marketDataDTO -> saveMarketData(marketDataDTO, savedStockData));
     }
 
-    public Flux<MarketData> saveMarketData(List<MktDataDTO> marketDataDTOList, StockData savedStockData) {
-        return Flux.fromIterable(marketDataDTOList)
-                .flatMap(mktDataDTO -> {
-                    MarketData marketData = conversionService.convert(mktDataDTO, MarketData.class);
-                    marketData.setStockData(savedStockData);
-                    marketDataRepository.save(marketData);
-                    return Mono.just(marketData);
-                });
+    public Flux<MarketData> saveMarketData(MktDataDTO marketDataDTO, StockData savedStockData) {
+        MarketData marketData = conversionService.convert(marketDataDTO, MarketData.class);
+        marketData.setStockData(savedStockData);
+        marketDataRepository.save(marketData);
+        return Flux.just(marketData);
     }
-    
+
     public List<MarketData> findByStockName(String stockName) {
         return marketDataRepository.findAllByStockDataStockName(stockName);
     }
