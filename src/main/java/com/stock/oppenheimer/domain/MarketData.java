@@ -13,7 +13,7 @@ public class MarketData {
     @Id
     public Long Id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stockTickerId", referencedColumnName = "id", nullable = false)
     private StockData stockData;
 
