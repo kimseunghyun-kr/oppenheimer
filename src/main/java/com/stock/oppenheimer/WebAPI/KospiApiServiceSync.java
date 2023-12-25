@@ -7,7 +7,6 @@ import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.DTO.StockDataDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class KospiApiService implements ApiService {
+public class KospiApiServiceSync implements ApiServiceSync {
 
     private static final String BASE_URL = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
     private static final Integer NUMROWS = 30;
@@ -32,9 +31,9 @@ public class KospiApiService implements ApiService {
     private final ConversionService conversionService;
 
     @Autowired
-    public KospiApiService(RestTemplate restTemplate,
-                           ConversionService conversionService,
-                           @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey) {
+    public KospiApiServiceSync(RestTemplate restTemplate,
+                               ConversionService conversionService,
+                               @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey) {
         this.restTemplate = restTemplate;
         this.serviceKey = serviceKey;
         this.conversionService = conversionService;

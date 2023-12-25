@@ -32,7 +32,7 @@ import java.util.function.Function;
  */
 @Service
 @Slf4j
-public class AsyncKospiApiService implements AsyncApiService{
+public class KospiApiService implements ApiService {
 
     private static final Integer NUMROWS = 30;
     private final WebClient webClient;
@@ -41,7 +41,7 @@ public class AsyncKospiApiService implements AsyncApiService{
     private final ConversionService conversionService;
 
     @Autowired
-    public AsyncKospiApiService(@Qualifier("KOSPIApiClient")WebClient webclient,
+    public KospiApiService(@Qualifier("KOSPIApiClient")WebClient webclient,
                            ConversionService conversionService,
                            @Value("${SERVICE_KEY_ENV_VAR}") String serviceKey) {
         this.webClient = webclient;
@@ -91,6 +91,7 @@ public class AsyncKospiApiService implements AsyncApiService{
 
         if (toDate != null) {
             uriBuilder.queryParam("endBasDt", toDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+//            uriBuilder.queryParam("basDt", toDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         }
     }
 

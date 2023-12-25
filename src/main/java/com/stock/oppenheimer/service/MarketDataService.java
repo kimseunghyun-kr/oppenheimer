@@ -1,7 +1,7 @@
 package com.stock.oppenheimer.service;
 
 import com.stock.oppenheimer.DTO.MktDataDTO;
-import com.stock.oppenheimer.WebAPI.ApiService;
+import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.repository.MarketDataRepository;
@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;

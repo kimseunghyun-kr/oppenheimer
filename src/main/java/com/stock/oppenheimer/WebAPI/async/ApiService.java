@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
-public interface AsyncApiService {
+public interface ApiService {
 
 
     //    gets data of the stock

@@ -1,6 +1,7 @@
 package com.stock.oppenheimer.service;
 
-import com.stock.oppenheimer.WebAPI.ApiService;
+import com.stock.oppenheimer.WebAPI.ApiServiceSync;
+import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
