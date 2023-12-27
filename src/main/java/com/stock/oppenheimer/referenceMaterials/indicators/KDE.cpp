@@ -5,16 +5,16 @@
 
 class KDE{
 
-private{
+private:
     std::map<double,double> cumulativeVolumeHistogram
-}
 
-public{
+
+public:
 // Function to generate a histogram for prices based on volume
     void generateHistogram(const std::vector<double>& prices, const std::vector<double>& volumes, int numBins) {
     // Find the minimum and maximum volume
-    int minVolume = *std::min_element(volumes.begin(), volumes.end());
-    int maxVolume = *std::max_element(volumes.begin(), volumes.end());
+    double minVolume = *std::min_element(volumes.begin(), volumes.end());
+    double maxVolume = *std::max_element(volumes.begin(), volumes.end());
 
     // Calculate bin width
     int binWidth = (maxVolume - minVolume) / numBins;
@@ -24,7 +24,7 @@ public{
 
     // Iterate through prices and populate the histogram
     for (size_t i = 0; i < prices.size(); ++i) {
-        int bin = (volumes[i] - minVolume) / binWidth;
+        double bin = (volumes[i] - minVolume) / binWidth;
         histogram[bin] += volumes[i];
     }
 
@@ -55,9 +55,10 @@ public{
 
 
     double wholeKernelDensityEstimation(double bandwidth){
-        std::vector<double>& volume = std::transform(this.cumulativeVolumeHistogram.begin(),
+         std::vector<double>& volume
+         std::transform(this.cumulativeVolumeHistogram.begin(),
                                                      this.cumulativeVolumeHistogram.end(),
-                                                     std::back_inserter(valueList),
+                                                     std::back_inserter(volume),
                                                      [](const auto& pair) { return pair.second; });
         // Update cumulativeVolumeHistogram with kernel density estimates
         auto it = this->cumulativeVolumeHistogram.begin();
@@ -66,5 +67,4 @@ public{
             ++it;
         }
     }
-}
 }
