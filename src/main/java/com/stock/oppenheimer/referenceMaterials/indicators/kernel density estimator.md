@@ -13,3 +13,5 @@ kde step by step
 https://towardsdatascience.com/kernel-density-estimation-explained-step-by-step-7cc5b5bc4517
 pi explanation
 https://www.youtube.com/watch?v=cy8r7WSuT1I
+make from scratch
+https://billc.io/blog/kde-from-scratch
