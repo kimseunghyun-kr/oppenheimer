@@ -29,6 +29,7 @@ dependencies {
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.1.2")
 	implementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.apache.commons:commons-math3:3.6.1")
 	implementation("com.h2database:h2")
 
 	// Uncomment if using MongoDB and Spring Security
