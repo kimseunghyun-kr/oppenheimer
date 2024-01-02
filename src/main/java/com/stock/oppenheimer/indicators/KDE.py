@@ -9,29 +9,40 @@ import psycopg2  # Assuming PostgreSQL-specific library if needed
 import h2        # Assuming H2-specific library if needed
 
 def processSelector(cursor, action, target):
-    if(action == 1) :
+    if action == 1:
         VolumeProfileIndicator(cursor, target)
-    return result
 
-def VolumeProfileIndicator(cursor , target):
-    data = cursor.execute("SELECT * FROM MARKETDATA m WHERE m.stockTickerId = " + target);
+def VolumeProfileIndicator(cursor , target, prominence = 0.3):
+    cursor.execute("SELECT * FROM MARKETDATA m WHERE m.stockTickerId = " + target);
     rows = cursor.fetchall()
-    columns = [desc[0] for desc in cursor.description];
-    df = pd.DataFram(rows, columns = columns)
+    columns = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(rows, columns = columns)
+    xr, kdy, samplePerBins = KDE(df)
+    min_prom = kdy.max() * prominence
+    max_width_pips = 20
+    pipsize = 0.00001
+    width_range=(1, max_width_pips * pipsize / samplePerBins)
+    peaks, peak_props = signal.find_peaks(kdy, prominence=min_prom, width = width_range)
+    pkx = xr[peaks]
+    pky = kdy[peaks]
+
 
 def KDE(df):
     kde_factor = 0.05
     bins = 500
+    close = df['close']
+    volume = df['volume']
     kde = stats.gaussian_kde(close, weights = volume , bw_method = kde_factor)
     xr = np.linspace(close.min(), close.max(), bins)
     kdy = kde(xr)
     samplePerBins = (xr.max()- xr.min()) / bins
+    return xr, kdy, samplePerBins
     
 def Histogram(cursor, target):
     data = cursor.execute("SELECT m.close, Sum(m.volume) FROM MARKETDATA m WHERE m.stockTickerID = " + target + "GROUP BY m.close")
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description];
-    df = pd.DataFram(rows, columns = columns)
+    df = pd.DataFrame(rows, columns = columns)
     return df
 
     
