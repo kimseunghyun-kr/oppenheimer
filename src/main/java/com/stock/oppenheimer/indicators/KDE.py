@@ -69,9 +69,32 @@ def Histogram(cursor, target):
     return df
 
 def VolumeAreaContinuous(cursor, target):
-    return;
+    xr, kdy, binSize = VolumeProfileIndicator(cursor,target)
+    p_values = [0.3,0.7]
+    # Calculate the cumulative density
+    cumulative_density = np.cumsum(kdy) * binSize
+
+    # Find values in xr corresponding to given percentiles
+    percentile_values = []
+    for p in p_values:
+        index = np.argmax(cumulative_density >= p)
+        percentile_values.append(xr[index])
+
+    return percentile_values
 def VolumeAreaDiscrete(cursor, target):
-    return;
+    df = Histogram(cursor,target);
+
+    # Calculate the cumulative density
+    cumulative_density = np.cumsum(df['volume']) / np.sum(df['volume'])
+    p_values = [0.3,0.7]
+    # Find values in 'close' corresponding to given percentiles
+    percentile_values = []
+    for p in p_values:
+        index = np.argmax(cumulative_density >= p)
+        percentile_values.append(df['close'].iloc[index])
+
+    return percentile_values
+
 if __name__ == "__main__":
     # Check for the command-line argument indicating the database context
     if len(sys.argv) != 2:
