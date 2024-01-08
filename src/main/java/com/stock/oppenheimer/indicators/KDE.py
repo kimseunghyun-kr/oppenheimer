@@ -3,7 +3,7 @@ import numpy as np
 from scipy import stats, signal
 import plotly.express as px
 import plotly.graph_objects as go
-
+import os
 import sys
 import psycopg2  # Assuming PostgreSQL-specific library if needed
 import jaydebeapi  # Assuming H2-specific library if needed
@@ -101,6 +101,8 @@ def VolumeAreaDiscrete(cursor, target):
 
 if __name__ == "__main__":
     print("start")
+    BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+    print(BASE_DIR)
     # Check for the command-line argument indicating the database context
     if len(sys.argv) < 4:
         print("Usage: python_script.py <database_context>")
@@ -121,10 +123,11 @@ if __name__ == "__main__":
     try:
         if database_context.lower() == "h2":
             # Initialize H2-specific resources if needed
-            h2_jar_path = "C:/Users/USER/.gradle/caches/modules-2/files-2.1/com.h2database/h2/2.1.214/d5c2005c9e3279201e12d4776c948578b16bf8b2/h2-2.1.214.jar"
-            url = "jdbc:h2:mem:testdb"
+            h2_jar_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "h2-2.1.214.jar")
+            # "C:/Users/aski-/java/oppenheimer/src/main/java/com/stock/oppenheimer/indicators/h2-2.1.214.jar"
+            url = "jdbc:h2:/data/test;AUTO_SERVER=TRUE"
             driver = "org.h2.Driver"
-            user = "SA"
+            user = ""
             password = ""
 
             # Attempt to connect to the H2 database
