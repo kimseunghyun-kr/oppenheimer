@@ -9,7 +9,7 @@ import psycopg2  # Assuming PostgreSQL-specific library if needed
 import jaydebeapi  # Assuming H2-specific library if needed
 
 
-def processSelector(cursor, action, target):
+def processSelector(cursor, action, target, kargs):
     if action == 1:
         VolumeProfileIndicator(cursor, target)
     if action == 2:
@@ -68,9 +68,10 @@ def Histogram(cursor, target):
     df = pd.DataFrame(rows, columns=columns)
     return df
 
+
 def VolumeAreaContinuous(cursor, target):
-    xr, kdy, binSize = VolumeProfileIndicator(cursor,target)
-    p_values = [0.3,0.7]
+    xr, kdy, binSize = VolumeProfileIndicator(cursor, target)
+    p_values = [0.3, 0.7]
     # Calculate the cumulative density
     cumulative_density = np.cumsum(kdy) * binSize
 
@@ -81,12 +82,14 @@ def VolumeAreaContinuous(cursor, target):
         percentile_values.append(xr[index])
 
     return percentile_values
+
+
 def VolumeAreaDiscrete(cursor, target):
-    df = Histogram(cursor,target);
+    df = Histogram(cursor, target);
 
     # Calculate the cumulative density
     cumulative_density = np.cumsum(df['volume']) / np.sum(df['volume'])
-    p_values = [0.3,0.7]
+    p_values = [0.3, 0.7]
     # Find values in 'close' corresponding to given percentiles
     percentile_values = []
     for p in p_values:
@@ -95,9 +98,11 @@ def VolumeAreaDiscrete(cursor, target):
 
     return percentile_values
 
+
 if __name__ == "__main__":
+    print("start")
     # Check for the command-line argument indicating the database context
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 4:
         print("Usage: python_script.py <database_context>")
         sys.exit(1)
 
@@ -105,28 +110,47 @@ if __name__ == "__main__":
     database_context = sys.argv[1]
     indicatorAction = sys.argv[2]
     target = sys.argv[3]
+    additionalArgs = sys.argv[4:]
 
     cursor = None
 
-    if database_context.lower() != "h2" or database_context.lower() != "postgresql":
+    if database_context.lower() not in ["h2", "postgresql"]:
         print("Invalid database context. Supported values: h2, postgresql")
         sys.exit(1)
 
-    if database_context.lower() == "h2":
-        # Initialize H2-specific resources if needed
-        # h2.initialize()
-        connection = jaydebeapi.connect(
-            "org.h2.Driver",
-            "jdbc:h2:tcp://localhost:5234/exoplanets",
-            ["SA", ""],
-            "../h2-1.4.200.jar")
-        cursor = connection.cursor()
+    try:
+        if database_context.lower() == "h2":
+            # Initialize H2-specific resources if needed
+            h2_jar_path = "C:/Users/USER/.gradle/caches/modules-2/files-2.1/com.h2database/h2/2.1.214/d5c2005c9e3279201e12d4776c948578b16bf8b2/h2-2.1.214.jar"
+            url = "jdbc:h2:mem:testdb"
+            driver = "org.h2.Driver"
+            user = "SA"
+            password = ""
 
-    if database_context.lower() == "postgresql":
-        # Initialize PostgreSQL-specific resources if needed
-        connection = psycopg2.connect(":memory:")
-        cursor = connection.cursor()
+            # Attempt to connect to the H2 database
+            conn = jaydebeapi.connect(driver, url, [user, password], h2_jar_path)
+            cursor = conn.cursor()
+            print("Connected to H2 database.")
+            # Additional print statements or actions can be added here
 
-    processSelector(cursor, indicatorAction, target)
+        elif database_context.lower() == "postgresql":
+            # Initialize PostgreSQL-specific resources if needed
+            connection = psycopg2.connect(":memory:")
+            cursor = connection.cursor()
+            print("Connected to PostgreSQL database.")
+            # Additional print statements or actions can be added here
 
-    # output the result for Java to retrieve
+        # Call the processSelector function
+        processSelector(cursor, indicatorAction, target, additionalArgs)
+
+    except Exception as e:
+        print(f"Error connecting to the database: {str(e)}")
+
+    finally:
+        # Close the database connection
+        if cursor:
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+        if 'connection' in locals():
+            connection.close()

@@ -13,7 +13,7 @@ public interface MarketDataRepository extends JpaRepository<MarketData, Long> {
     List<MarketData> findAllByStockDataStockName(String stockName);
 
     @Query("SELECT m.close, SUM(m.volume) FROM MarketData m WHERE m.stockData.stockName = :stockName GROUP BY m.close")
-    List<Object[]> findCloseAndSumVolumeByStockName(@Param("stockData") String stockName);
+    List<Object[]> findCloseAndSumVolumeByStockName(@Param("stockName") String stockName);
 
     default Map<Long, Long> findCloseAndSumVolumeMapByStockData(String stockName) {
         List<Object[]> result = findCloseAndSumVolumeByStockName(stockName);
