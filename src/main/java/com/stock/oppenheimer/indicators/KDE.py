@@ -10,12 +10,25 @@ import jaydebeapi  # Assuming H2-specific library if needed
 
 
 def processSelector(cursor, action, target, kargs):
+    if action == 0:
+        dbTestCallIndicator(cursor,target)
     if action == 1:
         VolumeProfileIndicator(cursor, target)
     if action == 2:
         Histogram(cursor, target)
     if action == 3:
         Prominence(cursor, target)
+
+
+    print("python script successfully ran")
+
+def dbTestCallIndicator(cursor, target):
+    cursor.execute("SELECT * FROM MARKET_DATA")
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(rows, columns=columns)
+    # display(df)
+    print(df.to_markdown())
 
 
 def Prominence(cursor, target):
@@ -35,7 +48,6 @@ def peakWidth(cursor, target):
     peaks, peak_props = signal.find_peaks(kdy, prominence=min_prom, width=width_range)
     pkx = xr[peaks]
     pky = kdy[peaks]
-
     return xr, kdy
 
 
@@ -45,6 +57,7 @@ def VolumeProfileIndicator(cursor, target):
     columns = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(rows, columns=columns)
     xr, kdy, binSize = KDE(df)
+    print("volumeProfileCompleted")
     return xr, kdy, binSize
 
 
@@ -62,7 +75,7 @@ def KDE(df):
 
 def Histogram(cursor, target):
     cursor.execute(
-        "SELECT m.close, Sum(m.volume) FROM MARKETDATA m WHERE m.stockTickerID = " + target + "GROUP BY m.close")
+        "SELECT m.close, Sum(m.volume) FROM MARKET_DATA m WHERE m.stockTickerID = " + target + "GROUP BY m.close")
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(rows, columns=columns)
@@ -110,7 +123,7 @@ if __name__ == "__main__":
 
     # Extract the database context from the command-line argument
     database_context = sys.argv[1]
-    indicatorAction = sys.argv[2]
+    indicatorAction = int(sys.argv[2])
     target = sys.argv[3]
     additionalArgs = sys.argv[4:]
 

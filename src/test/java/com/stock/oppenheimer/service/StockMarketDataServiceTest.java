@@ -1,11 +1,13 @@
 package com.stock.oppenheimer.service;
 
+import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -13,8 +15,8 @@ import reactor.test.StepVerifier;
 import java.util.List;
 
 @SpringBootTest
-@Transactional
 @Slf4j
+@Transactional
 public class StockMarketDataServiceTest {
 
 
@@ -36,6 +38,7 @@ public class StockMarketDataServiceTest {
         StepVerifier.create(resultMono)
                 .expectNextCount(1)
                 .verifyComplete();
+//        StockData stockData = resultMono.block();
         StockData sd = stockDataService.findByStockName("삼성전자");
         log.info("stockData = , {}", sd);
         List<MarketData> md = marketDataService.findByStockName("삼성전자");

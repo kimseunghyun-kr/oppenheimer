@@ -16,7 +16,7 @@ public class H2DBConnectionTest {
 
     @Test
     void H2DBConnectionTest(){
-        volumeProfilePythonAdapter.runPythonScript("H2", "1","삼성전자");
+        volumeProfilePythonAdapter.runPythonScript("H2", "0","삼성전자");
     }
 
 

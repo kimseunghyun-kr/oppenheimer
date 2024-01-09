@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
-@Transactional
+//@Transactional
 public class StockMarketFacadeService {
     private final StockDataService stockDataService;
     private final MarketDataService marketDataService;
