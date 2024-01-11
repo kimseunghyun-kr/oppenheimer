@@ -1,10 +1,10 @@
-package com.stock.oppenheimer.service;
+package com.stock.oppenheimer.service.r2dbc;
 
 import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.MarketDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.MarketDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -17,18 +17,20 @@ import java.util.List;
 
 @Service
 @Slf4j
-//@Transactional
+@Transactional
 public class MarketDataService {
 
     private final MarketDataRepository marketDataRepository;
     private final ConversionService conversionService;
     private final ApiService apiService;
+    private final MarketDataSave marketDataSave;
 
     @Autowired
-    public MarketDataService(MarketDataRepository marketDataRepository, ConversionService conversionService, ApiService apiService) {
+    public MarketDataService(MarketDataRepository marketDataRepository, ConversionService conversionService, ApiService apiService, MarketDataSave marketDataSave) {
         this.marketDataRepository = marketDataRepository;
         this.conversionService = conversionService;
         this.apiService = apiService;
+        this.marketDataSave = marketDataSave;
     }
 
 
@@ -37,11 +39,13 @@ public class MarketDataService {
                 .flatMap(marketDataDTO -> saveMarketData(marketDataDTO, savedStockData));
     }
 
-    public Flux<MarketData> saveMarketData(MktDataDTO marketDataDTO, StockData savedStockData) {
+    @Transactional
+    public synchronized Flux<MarketData> saveMarketData(MktDataDTO marketDataDTO, StockData savedStockData) {
         MarketData marketData = conversionService.convert(marketDataDTO, MarketData.class);
         marketData.setStockData(savedStockData);
-        marketDataRepository.save(marketData);
-        return Flux.just(marketData);
+        return Flux.just(marketData).map(marketDataSave::marketDataSave);
+//        marketDataSave.marketDataSave(marketData);
+//        return Flux.just(marketData);
     }
 
     public List<MarketData> findByStockName(String stockName) {

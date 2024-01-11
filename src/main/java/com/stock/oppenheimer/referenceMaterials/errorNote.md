@@ -22,3 +22,8 @@ Returning an empty Mono is a reactive way of signaling that a step in the chain 
 In your case, if you want to void a specific part of a transaction based on a condition (such as the inability to convert stockDataDTO), returning an empty Mono seems like a more appropriate choice. This approach allows you to continue the reactive flow while clearly indicating the failure of that step.
 
 Remember that the choice depends on your specific requirements, the granularity of error handling you want, and the overall design of your reactive chain. Both approaches can work, but using an empty Mono to indicate a step's failure is more aligned with reactive programming principles and provides better flexibility in handling different error scenarios.
+
+
+https://jiwhunkim.github.io/develop/2020/02/01/spring-using-together-jpa-and-r2dbc.html
+
+

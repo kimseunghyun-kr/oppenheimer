@@ -1,4 +1,4 @@
-package com.stock.oppenheimer.repository;
+package com.stock.oppenheimer.repository.jpaRepository;
 
 import com.stock.oppenheimer.domain.StockData;
 import org.springframework.data.jpa.repository.JpaRepository;

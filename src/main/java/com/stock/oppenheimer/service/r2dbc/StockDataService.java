@@ -1,11 +1,11 @@
-package com.stock.oppenheimer.service;
+package com.stock.oppenheimer.service.r2dbc;
 
-import com.stock.oppenheimer.WebAPI.ApiServiceSync;
 import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.repository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -21,17 +22,21 @@ import java.time.LocalDate;
 
 @Service
 @Slf4j
-//@Transactional
+@Transactional
 public class StockDataService {
     private final TickerDataRepository tickerDataRepository;
     private final ApiService apiService;
     private final ConversionService conversionService;
+    private final StockDataSave stockDataSave;
+    private final EntityManager em;
 
     @Autowired
-    public StockDataService(TickerDataRepository tickerDataRepository, ApiService apiService, ConversionService conversionService) {
+    public StockDataService(TickerDataRepository tickerDataRepository, ApiService apiService, ConversionService conversionService, StockDataSave stockDataSave, EntityManager em) {
         this.tickerDataRepository = tickerDataRepository;
         this.apiService = apiService;
         this.conversionService = conversionService;
+        this.stockDataSave = stockDataSave;
+        this.em = em;
     }
 
     public Page<StockData> findAllMatching(TickerSearchConditionDTO searchDTO, Pageable pageable) {
@@ -92,8 +97,12 @@ public class StockDataService {
     }
 
 //helper methods
-    private Mono<StockData> saveStockData(StockData stockData) {
-        return Mono.fromCallable(() -> tickerDataRepository.save(stockData));
+    public Mono<StockData> saveStockData(StockData stockData) {
+//        return Mono.fromCallable(() -> {
+//            log.info("transactionCheck          {}" , TransactionSynchronizationManager.isActualTransactionActive());
+//            return stockDataSave.stockDataSave(stockData);
+//        });
+        return Mono.just(stockData).map(stockDataSave::stockDataSave);
     }
 
 

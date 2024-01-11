@@ -29,6 +29,12 @@ def dbTestCallIndicator(cursor, target):
     df = pd.DataFrame(rows, columns=columns)
     # display(df)
     print(df.to_markdown())
+    cursor.execute("SELECT * FROM STOCK_DATA")
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(rows, columns=columns)
+    # display(df)
+    print(df.to_markdown())
 
 
 def Prominence(cursor, target):

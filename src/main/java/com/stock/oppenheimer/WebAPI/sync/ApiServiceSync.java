@@ -1,4 +1,4 @@
-package com.stock.oppenheimer.WebAPI;
+package com.stock.oppenheimer.WebAPI.sync;
 
 import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.DTO.StockDataDTO;

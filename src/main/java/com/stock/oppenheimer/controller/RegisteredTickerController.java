@@ -2,8 +2,8 @@ package com.stock.oppenheimer.controller;
 
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.service.StockDataService;
-import com.stock.oppenheimer.service.StockMarketFacadeService;
+import com.stock.oppenheimer.service.r2dbc.StockDataService;
+import com.stock.oppenheimer.service.r2dbc.StockMarketFacadeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.stock.oppenheimer.WebAPI;
+package com.stock.oppenheimer.WebAPI.sync;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stock.oppenheimer.DTO.Kospi.KospiDTO;

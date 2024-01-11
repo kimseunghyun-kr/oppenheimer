@@ -1,8 +1,10 @@
 package com.stock.oppenheimer.service;
 
-import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
+import com.stock.oppenheimer.service.r2dbc.MarketDataService;
+import com.stock.oppenheimer.service.r2dbc.StockDataService;
+import com.stock.oppenheimer.service.r2dbc.StockMarketFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class StockMarketDataServiceTest {
     }
 
     @Test
+    @Rollback
     void testAddByStockName() {
         // Call the method and verify the outcome
         Mono<StockData> resultMono = stockMarketFacadeService.addStockMarketData("삼성전자",null);

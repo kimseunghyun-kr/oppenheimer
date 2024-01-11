@@ -2,13 +2,14 @@ package com.stock.oppenheimer.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import net.bytebuddy.asm.Advice;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
+@Table(name = "STOCK_DATA")
 public class StockData {
 
     @Id

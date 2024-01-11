@@ -2,7 +2,8 @@ package com.stock.oppenheimer.service;
 
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.repository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.service.r2dbc.StockDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

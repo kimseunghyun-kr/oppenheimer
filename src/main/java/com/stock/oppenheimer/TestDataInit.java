@@ -2,7 +2,7 @@ package com.stock.oppenheimer;
 
 
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

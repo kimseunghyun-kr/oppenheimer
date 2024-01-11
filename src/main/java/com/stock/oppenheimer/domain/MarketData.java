@@ -17,6 +17,8 @@ public class MarketData {
     @JoinColumn(name = "stockTickerId", referencedColumnName = "id", nullable = false)
     private StockData stockData;
 
+    public String assocTicker;
+
     public LocalDate tradeDate; //거래일
     public Long open; //시가
     public Long high; //고가
