@@ -1,6 +1,6 @@
 package com.stock.oppenheimer;
 
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,8 @@ public class OppenheimerApplication {
 
 	@Bean
 	@Profile("local")
-	public TestDataInit testDataInit(TickerDataRepository tickerDataRepository) {
-		return new TestDataInit(tickerDataRepository);
+	public TestDataInit testDataInit(TickerDataJPARepository tickerDataJPARepository) {
+		return new TestDataInit(tickerDataJPARepository);
 	}
 
 }

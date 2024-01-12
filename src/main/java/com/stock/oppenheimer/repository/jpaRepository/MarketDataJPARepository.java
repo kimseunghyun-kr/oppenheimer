@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public interface MarketDataRepository extends JpaRepository<MarketData, Long> {
+public interface MarketDataJPARepository extends JpaRepository<MarketData, Long> {
     List<MarketData> findAllByStockDataStockName(String stockName);
 
     @Query("SELECT m.close, SUM(m.volume) FROM MarketData m WHERE m.stockData.stockName = :stockName GROUP BY m.close")

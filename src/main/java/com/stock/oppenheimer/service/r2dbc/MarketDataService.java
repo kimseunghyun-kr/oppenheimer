@@ -4,7 +4,7 @@ import com.stock.oppenheimer.DTO.MktDataDTO;
 import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.jpaRepository.MarketDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.MarketDataJPARepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -20,14 +20,14 @@ import java.util.List;
 @Transactional
 public class MarketDataService {
 
-    private final MarketDataRepository marketDataRepository;
+    private final MarketDataJPARepository marketDataJPARepository;
     private final ConversionService conversionService;
     private final ApiService apiService;
     private final MarketDataSave marketDataSave;
 
     @Autowired
-    public MarketDataService(MarketDataRepository marketDataRepository, ConversionService conversionService, ApiService apiService, MarketDataSave marketDataSave) {
-        this.marketDataRepository = marketDataRepository;
+    public MarketDataService(MarketDataJPARepository marketDataJPARepository, ConversionService conversionService, ApiService apiService, MarketDataSave marketDataSave) {
+        this.marketDataJPARepository = marketDataJPARepository;
         this.conversionService = conversionService;
         this.apiService = apiService;
         this.marketDataSave = marketDataSave;
@@ -49,7 +49,7 @@ public class MarketDataService {
     }
 
     public List<MarketData> findByStockName(String stockName) {
-        return marketDataRepository.findAllByStockDataStockName(stockName);
+        return marketDataJPARepository.findAllByStockDataStockName(stockName);
     }
 
 }

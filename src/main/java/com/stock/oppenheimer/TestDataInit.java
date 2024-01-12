@@ -2,7 +2,7 @@ package com.stock.oppenheimer;
 
 
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class TestDataInit {
 
-    private final TickerDataRepository tickerDataRepository;
+    private final TickerDataJPARepository tickerDataJPARepository;
     /**
      * 확인용 초기 데이터 추가
      */
@@ -31,7 +31,7 @@ public class TestDataInit {
         stockData.mktCtg ="NASDAQ";
         stockData.stockName = "Apple";
         stockData.associatedIndicators = new ArrayList<>();
-        tickerDataRepository.save(stockData);
+        tickerDataJPARepository.save(stockData);
     }
 
 }

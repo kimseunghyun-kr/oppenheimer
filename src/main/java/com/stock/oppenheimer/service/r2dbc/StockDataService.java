@@ -4,8 +4,7 @@ import com.stock.oppenheimer.WebAPI.async.ApiService;
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
-import jakarta.persistence.EntityManager;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -24,34 +23,32 @@ import java.time.LocalDate;
 @Slf4j
 @Transactional
 public class StockDataService {
-    private final TickerDataRepository tickerDataRepository;
+    private final TickerDataJPARepository tickerDataJPARepository;
     private final ApiService apiService;
     private final ConversionService conversionService;
     private final StockDataSave stockDataSave;
-    private final EntityManager em;
 
     @Autowired
-    public StockDataService(TickerDataRepository tickerDataRepository, ApiService apiService, ConversionService conversionService, StockDataSave stockDataSave, EntityManager em) {
-        this.tickerDataRepository = tickerDataRepository;
+    public StockDataService(TickerDataJPARepository tickerDataJPARepository, ApiService apiService, ConversionService conversionService, StockDataSave stockDataSave) {
+        this.tickerDataJPARepository = tickerDataJPARepository;
         this.apiService = apiService;
         this.conversionService = conversionService;
         this.stockDataSave = stockDataSave;
-        this.em = em;
     }
 
     public Page<StockData> findAllMatching(TickerSearchConditionDTO searchDTO, Pageable pageable) {
 
         // create a specification object
         Specification<StockData> spec = new TickerSpecification(searchDTO);
-        return tickerDataRepository.findAll(spec, pageable);
+        return tickerDataJPARepository.findAll(spec, pageable);
     }
 
     public StockData findByTickerName(String tickerName) {
-        return tickerDataRepository.findByTicker(tickerName);
+        return tickerDataJPARepository.findByTicker(tickerName);
     }
 
     public StockData removeByTickerName(String tickerName) {
-        return tickerDataRepository.deleteByTicker(tickerName);
+        return tickerDataJPARepository.deleteByTicker(tickerName);
     }
 
     // method reference does not work here because -> Method references are better suited for direct method calls, while lambdas might provide more flexibility when dealing with reactive chains, especially if you need to perform multiple operations or access surrounding variables.
@@ -62,11 +59,11 @@ public class StockDataService {
     }
 
     public StockData removeByStockName(String stockName) {
-        return tickerDataRepository.deleteByStockName(stockName);
+        return tickerDataJPARepository.deleteByStockName(stockName);
     }
 
     public StockData findByStockName(String stockName) {
-        return tickerDataRepository.findByStockName(stockName);
+        return tickerDataJPARepository.findByStockName(stockName);
     }
 
     public Mono<StockData> fetchStockData (String inputString ,boolean isTicker) {

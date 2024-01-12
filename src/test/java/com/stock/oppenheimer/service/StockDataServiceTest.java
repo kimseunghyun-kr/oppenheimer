@@ -2,7 +2,7 @@ package com.stock.oppenheimer.service;
 
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import com.stock.oppenheimer.service.r2dbc.StockDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StockDataServiceTest {
 
     @Autowired
-    TickerDataRepository tickerDataRepository;
+    TickerDataJPARepository tickerDataJPARepository;
     @Autowired
     StockDataService stockDataService;
 
@@ -42,14 +42,14 @@ public class StockDataServiceTest {
         stockData.mktCtg ="NASDAQ";
         stockData.stockName = "Apple";
         stockData.associatedIndicators = new ArrayList<>();
-        tickerDataRepository.save(stockData);
+        tickerDataJPARepository.save(stockData);
         this.stockData = stockData;
 
         log.info("beforeEach");
     }
     @AfterEach
     void afterEach() {
-        tickerDataRepository.deleteAll();
+        tickerDataJPARepository.deleteAll();
     }
 
     @Test

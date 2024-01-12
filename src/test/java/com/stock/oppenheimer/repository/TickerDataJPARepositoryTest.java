@@ -2,7 +2,7 @@ package com.stock.oppenheimer.repository;
 
 
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 @Slf4j
-public class TickerDataRepositoryTest {
+public class TickerDataJPARepositoryTest {
     @Autowired
-    TickerDataRepository tickerDataRepository;
+    TickerDataJPARepository tickerDataJPARepository;
 
     private StockData stockData;
 
@@ -35,18 +35,18 @@ public class TickerDataRepositoryTest {
         stockData.mktCtg ="NASDAQ";
         stockData.stockName = "Apple";
         stockData.associatedIndicators = new ArrayList<>();
-        tickerDataRepository.save(stockData);
+        tickerDataJPARepository.save(stockData);
         this.stockData = stockData;
         log.info("beforeEach");
     }
     @AfterEach
     void afterEach() {
-        tickerDataRepository.deleteAll();
+        tickerDataJPARepository.deleteAll();
     }
 
     @Test
     void testFindTicker(){
-        StockData foundStock = tickerDataRepository.findByTicker("AAPL");
+        StockData foundStock = tickerDataJPARepository.findByTicker("AAPL");
         assertThat(foundStock).isEqualTo(this.stockData);
     }
 

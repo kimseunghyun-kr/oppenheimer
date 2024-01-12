@@ -1,7 +1,7 @@
 package com.stock.oppenheimer.service.r2dbc;
 
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.repository.jpaRepository.TickerDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,15 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class StockDataSave {
 
-    private final TickerDataRepository tickerDataRepository;
+    private final TickerDataJPARepository tickerDataJPARepository;
 
     @Autowired
-    public StockDataSave(TickerDataRepository tickerDataRepository) {
-        this.tickerDataRepository = tickerDataRepository;
+    public StockDataSave(TickerDataJPARepository tickerDataJPARepository) {
+        this.tickerDataJPARepository = tickerDataJPARepository;
     }
 
     public StockData stockDataSave(StockData stockData) {
-        tickerDataRepository.save(stockData);
+        tickerDataJPARepository.save(stockData);
         return stockData;
     }
 }

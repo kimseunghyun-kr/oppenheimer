@@ -1,7 +1,7 @@
 package com.stock.oppenheimer.service.r2dbc;
 
 import com.stock.oppenheimer.domain.MarketData;
-import com.stock.oppenheimer.repository.jpaRepository.MarketDataRepository;
+import com.stock.oppenheimer.repository.jpaRepository.MarketDataJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,15 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MarketDataSave {
 
-    private final MarketDataRepository marketDataRepository;
+    private final MarketDataJPARepository marketDataJPARepository;
 
     @Autowired
-    public MarketDataSave(MarketDataRepository marketDataRepository) {
-        this.marketDataRepository = marketDataRepository;
+    public MarketDataSave(MarketDataJPARepository marketDataJPARepository) {
+        this.marketDataJPARepository = marketDataJPARepository;
     }
 
     public MarketData marketDataSave(MarketData marketData) {
-        marketDataRepository.save(marketData);
+        marketDataJPARepository.save(marketData);
         return marketData;
     }
 }

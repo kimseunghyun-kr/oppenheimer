@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TickerDataRepository extends JpaRepository<StockData, Long> , JpaSpecificationExecutor<StockData> {
+public interface TickerDataJPARepository extends JpaRepository<StockData, Long> , JpaSpecificationExecutor<StockData> {
 
     StockData findByTicker(String tickerName);
 
