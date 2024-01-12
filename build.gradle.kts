@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.1.2"
+	id("org.springframework.boot") version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.2"
 }
 
@@ -31,8 +31,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.apache.commons:commons-math3:3.6.1")
 	implementation("com.h2database:h2")
-	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.2.1")
-
+//	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.2.1")
+//	implementation("io.r2dbc:r2dbc-h2:1.0.0.RELEASE")
 	// Uncomment if using MongoDB and Spring Security
 	// implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	// implementation("org.springframework.boot:spring-boot-starter-security")
@@ -51,7 +51,7 @@ dependencies {
 
 	// Testing Dependencies
 	testImplementation("org.projectlombok:lombok:1.18.26")
-	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
+//	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("io.projectreactor:reactor-test")
 }

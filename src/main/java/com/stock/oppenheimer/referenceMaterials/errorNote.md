@@ -27,3 +27,8 @@ Remember that the choice depends on your specific requirements, the granularity 
 https://jiwhunkim.github.io/develop/2020/02/01/spring-using-together-jpa-and-r2dbc.html
 
 
+# create then drop entire schema post session -> create-drop
+# override create each time -> create
+# update from existing -> update
+
+
