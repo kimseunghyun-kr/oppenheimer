@@ -1,16 +1,11 @@
-package com.stock.oppenheimer.service;
+package com.stock.oppenheimer.service.r2dbc;
 
 import com.stock.oppenheimer.domain.MarketData;
 import com.stock.oppenheimer.domain.StockData;
-import com.stock.oppenheimer.service.r2dbc.MarketDataService;
-import com.stock.oppenheimer.service.r2dbc.StockDataService;
-import com.stock.oppenheimer.service.r2dbc.StockMarketFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-//import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;

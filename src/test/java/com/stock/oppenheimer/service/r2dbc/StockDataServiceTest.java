@@ -1,4 +1,4 @@
-package com.stock.oppenheimer.service;
+package com.stock.oppenheimer.service.r2dbc;
 
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;

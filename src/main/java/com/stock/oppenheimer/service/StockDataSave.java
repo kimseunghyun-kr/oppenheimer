@@ -1,4 +1,4 @@
-package com.stock.oppenheimer.service.r2dbc;
+package com.stock.oppenheimer.service;
 
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;

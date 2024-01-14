@@ -30,8 +30,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.1.2")
 	implementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.apache.commons:commons-math3:3.6.1")
-	implementation("com.h2database:h2")
-//	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.2.1")
+	implementation("com.h2database:h2:2.1.214")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.2.1")
 //	implementation("io.r2dbc:r2dbc-h2:1.0.0.RELEASE")
 	// Uncomment if using MongoDB and Spring Security
 	// implementation("org.springframework.boot:spring-boot-starter-data-mongodb")

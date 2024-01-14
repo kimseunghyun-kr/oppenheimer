@@ -1,42 +1,42 @@
-package com.stock.oppenheimer.service.r2dbc;
+package com.stock.oppenheimer.service.jpa;
 
-import com.stock.oppenheimer.WebAPI.async.ApiService;
+import com.stock.oppenheimer.DTO.StockDataDTO;
+import com.stock.oppenheimer.WebAPI.sync.ApiServiceSync;
 import com.stock.oppenheimer.controller.TickerSpecification;
 import com.stock.oppenheimer.domain.StockData;
 import com.stock.oppenheimer.domain.TickerSearchConditionDTO;
 import com.stock.oppenheimer.repository.jpaRepository.TickerDataJPARepository;
 import com.stock.oppenheimer.service.StockDataSave;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
+
 
 import java.time.LocalDate;
 
 
 @Service
-@Slf4j
 @Transactional
-public class StockDataService {
+public class StockDataServiceSync {
+
     private final TickerDataJPARepository tickerDataJPARepository;
-    private final ApiService apiService;
+    private final ApiServiceSync apiService;
     private final ConversionService conversionService;
     private final StockDataSave stockDataSave;
 
     @Autowired
-    public StockDataService(TickerDataJPARepository tickerDataJPARepository, ApiService apiService, ConversionService conversionService, StockDataSave stockDataSave) {
+    public StockDataServiceSync(TickerDataJPARepository tickerDataJPARepository, @Qualifier("webclientAdapter") ApiServiceSync apiService, ConversionService conversionService, StockDataSave stockDataSave) {
         this.tickerDataJPARepository = tickerDataJPARepository;
         this.apiService = apiService;
         this.conversionService = conversionService;
         this.stockDataSave = stockDataSave;
     }
+
 
     public Page<StockData> findAllMatching(TickerSearchConditionDTO searchDTO, Pageable pageable) {
 
@@ -54,7 +54,7 @@ public class StockDataService {
     }
 
     // method reference does not work here because -> Method references are better suited for direct method calls, while lambdas might provide more flexibility when dealing with reactive chains, especially if you need to perform multiple operations or access surrounding variables.
-    public Mono<StockData> addStockData(String stockName, String tickerName) {
+    public StockData addStockData(String stockName, String tickerName) {
         return (stockName != null)
                 ? fetchStockData(stockName, false)
                 : fetchStockData(tickerName, true);
@@ -68,38 +68,25 @@ public class StockDataService {
         return tickerDataJPARepository.findByStockName(stockName);
     }
 
-    public Mono<StockData> fetchStockData (String inputString ,boolean isTicker) {
-        if (isTicker) {
-            return apiService.fetchStockInfo(inputString, null)
-                    .flatMap(stockDataDTO -> {
-                        StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
-                        // quick conversion failure check
-                        if (stockData == null) {
-                            return Mono.empty();
-                        }
-                        stockData.setLastUpdatedDate(LocalDate.now());
-                        return Mono.fromSupplier(() -> saveStockData(stockData));
-                    });
+    public StockData fetchStockData (String inputString ,boolean isTicker) {
+        StockDataDTO sd = null;
+        if(isTicker) {
+            sd = apiService.fetchStockInfo(inputString, null);
         }
-
         else{
-            return apiService.fetchStockInfo(null, inputString)
-                    .flatMap(stockDataDTO -> {
-                        StockData stockData = conversionService.convert(stockDataDTO, StockData.class);
-//                        quick conversion failure check
-                        stockData.setLastUpdatedDate(LocalDate.now());
-                        return Mono.fromSupplier(() -> saveStockData(stockData));
-                    });
+            sd = apiService.fetchStockInfo(null, inputString);
         }
-    }
+            StockData stockData = conversionService.convert(sd, StockData.class);
+            if (sd == null) {
+                return null;
+            }
+            stockData.setLastUpdatedDate(LocalDate.now());
+            return saveStockData(stockData);
 
+    }
 
     //helper methods
     public StockData saveStockData(StockData stockData) {
-//        return Mono.fromCallable(() -> {
-//            log.info("transactionCheck          {}" , TransactionSynchronizationManager.isActualTransactionActive());
-//            return stockDataSave.stockDataSave(stockData);
-//        });
         return stockDataSave.stockDataSave(stockData);
     }
 
