@@ -24,7 +24,7 @@ In your case, if you want to void a specific part of a transaction based on a co
 Remember that the choice depends on your specific requirements, the granularity of error handling you want, and the overall design of your reactive chain. Both approaches can work, but using an empty Mono to indicate a step's failure is more aligned with reactive programming principles and provides better flexibility in handling different error scenarios.
 
 
-https://jiwhunkim.github.io/develop/2020/02/01/spring-using-together-jpa-and-r2dbc.html
+https://jiwhunkim.github.io/develop/2020/02/01/spring-using-together-jpa-and-r2dbc.html {quite useless}
 
 
 # create then drop entire schema post session -> create-drop
@@ -32,3 +32,7 @@ https://jiwhunkim.github.io/develop/2020/02/01/spring-using-together-jpa-and-r2d
 # update from existing -> update
 
 
+
+https://www.baeldung.com/spring-boot-configure-multiple-datasources
+
+https://github.com/hantsy/spring-puzzles/blob/master/jpa-r2dbc/docker-compose.yml

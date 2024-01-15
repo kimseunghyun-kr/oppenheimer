@@ -6,11 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+//import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+
 
 @SpringBootApplication()
-@EnableJpaRepositories(basePackages = {"com.stock.oppenheimer.repository.jpaRepository"})
-@EnableR2dbcRepositories(basePackages = {"com.stock.oppenheimer.repository.r2dbcRepository"})
+//@EnableJpaRepositories(basePackages = "com.stock.oppenheimer.repository.jpaRepository")
+//@EnableR2dbcRepositories(basePackages = "com.stock.oppenheimer.repository.r2dbcRepository")
 public class OppenheimerApplication {
 
 	public static void main(String[] args) {
