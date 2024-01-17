@@ -1,13 +1,17 @@
 package com.stock.oppenheimer.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockData {
 
     @Id
@@ -23,8 +27,11 @@ public class StockData {
     @Column(nullable = false)
     public String stockName;
 
-    @ElementCollection
-    public List<String> associatedIndicators;
+    @OneToMany(mappedBy = "stockData")
+    private List<MarketData> marketDataList;
+
+    @OneToMany(mappedBy = "stockData")
+    public List<AssociatedIndicator> associatedIndicators;
 
     //    @Column(nullable = false)
     public LocalDate lastUpdatedDate = LocalDate.now();
