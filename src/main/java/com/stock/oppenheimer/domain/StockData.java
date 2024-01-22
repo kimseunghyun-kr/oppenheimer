@@ -16,7 +16,7 @@ public class StockData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long stockId;
 
     @Column(nullable = false, unique = true)
     public String ticker;
@@ -30,8 +30,8 @@ public class StockData {
     @OneToMany(mappedBy = "stockData")
     private List<MarketData> marketDataList;
 
-    @OneToMany(mappedBy = "stockData")
-    public List<AssociatedIndicator> associatedIndicators;
+    @OneToMany(mappedBy = "id.stock",cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Indicator> associatedIndicators;
 
     //    @Column(nullable = false)
     public LocalDate lastUpdatedDate = LocalDate.now();

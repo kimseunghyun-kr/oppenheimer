@@ -14,7 +14,7 @@ public class MarketData {
     public Long Id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stockTickerId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "stockTickerId", referencedColumnName = "stockId", nullable = false)
     private StockData stockData;
 
     public String assocTicker;

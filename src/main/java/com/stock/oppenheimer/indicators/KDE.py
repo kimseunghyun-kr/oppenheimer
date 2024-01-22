@@ -13,16 +13,20 @@ def processSelector(cursor, action, target, kargs):
     if action == 0:
         dbTestCallIndicator(cursor,target)
     if action == 1:
-        VolumeProfileIndicator(cursor, target)
+        VolumeProfileIndicator(cursor, target, kargs)
     if action == 2:
-        Histogram(cursor, target)
+        Histogram(cursor, target, kargs)
     if action == 3:
-        Prominence(cursor, target)
+        Prominence(cursor, target, kargs)
+    if action == 4:
+        peakWidth(cursor, target, kargs)
+    if action == 5:
+        VolumeAreaContinuous(cursor, target, kargs)
 
 
     print("python script successfully ran")
 
-def dbTestCallIndicator(cursor, target):
+def dbTestCallIndicator(cursor, target):+
     cursor.execute("SELECT * FROM MARKET_DATA")
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
@@ -37,7 +41,7 @@ def dbTestCallIndicator(cursor, target):
     print(df.to_markdown())
 
 
-def Prominence(cursor, target):
+def Prominence(cursor, target, kargs):
     min_prom = 0.3
     xr, kdy, binSize = VolumeProfileIndicator(cursor, target)
     peaks, peak_props = signal.find_peaks(kdy, prominence=min_prom)
@@ -47,7 +51,7 @@ def Prominence(cursor, target):
     return xr, kdy
 
 
-def peakWidth(cursor, target):
+def peakWidth(cursor, target, kargs):
     min_prom = 0.3
     width_range = 1
     xr, kdy, binSize = VolumeProfileIndicator(cursor, target)
@@ -57,8 +61,23 @@ def peakWidth(cursor, target):
     return xr, kdy
 
 
-def VolumeProfileIndicator(cursor, target):
-    cursor.execute("SELECT * FROM MARKETDATA m WHERE m.stockTickerId = " + target)
+def VolumeProfileIndicator(cursor, target, kargs):
+    """
+    Fetches market data from the database for a given stock ticker ID and
+    performs volume profile analysis using the KDE function.
+
+    Parameters:
+    - cursor: Database cursor object.
+    - target: Stock ticker ID.
+    - kargs: Additional keyword arguments.
+
+    Returns:
+    - xr: X-values for volume profile.
+    - kdy: Y-values for volume profile.
+    - binSize: Size of the bins used in volume profile analysis.
+    """
+
+    cursor.execute("SELECT * FROM MARKETDATA m WHERE m.stockTickerId = ?", (target,))
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(rows, columns=columns)
@@ -68,6 +87,18 @@ def VolumeProfileIndicator(cursor, target):
 
 
 def KDE(df):
+    """
+    Performs kernel density estimation on 'close' prices with 'volume' weights.
+
+    Parameters:
+    - df: Pandas DataFrame with 'close' and 'volume' columns.
+
+    Returns:
+    - xr: X-values for kernel density estimation.
+    - kdy: Y-values for kernel density estimation.
+    - binSize: Size of the bins used in kernel density estimation.
+    """
+
     kde_factor = 0.05
     bins = 500
     close = df['close']
@@ -79,7 +110,7 @@ def KDE(df):
     return xr, kdy, binSize
 
 
-def Histogram(cursor, target):
+def Histogram(cursor, target, kargs):
     cursor.execute(
         "SELECT m.close, Sum(m.volume) FROM MARKET_DATA m WHERE m.stockTickerID = " + target + "GROUP BY m.close")
     rows = cursor.fetchall()
@@ -88,7 +119,7 @@ def Histogram(cursor, target):
     return df
 
 
-def VolumeAreaContinuous(cursor, target):
+def VolumeAreaContinuous(cursor, target, kargs):
     xr, kdy, binSize = VolumeProfileIndicator(cursor, target)
     p_values = [0.3, 0.7]
     # Calculate the cumulative density
@@ -104,7 +135,7 @@ def VolumeAreaContinuous(cursor, target):
 
 
 def VolumeAreaDiscrete(cursor, target):
-    df = Histogram(cursor, target);
+    df = Histogram(cursor, target)
 
     # Calculate the cumulative density
     cumulative_density = np.cumsum(df['volume']) / np.sum(df['volume'])
